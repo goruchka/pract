@@ -1,12 +1,10 @@
 <?php
-// Класс Book представляет книгу в библиотеке
 class Book {
     private $title;
     private $author;
     private $publishedYear;
     private $genre;
 
-    // Конструктор для инициализации всех свойств
     public function __construct($title, $author, $publishedYear, $genre) {
         $this->title = $title;
         $this->author = $author;
@@ -14,7 +12,6 @@ class Book {
         $this->genre = $genre;
     }
 
-    // Геттеры и сеттеры для всех свойств
     public function getTitle() {
         return $this->title;
     }
@@ -47,35 +44,30 @@ class Book {
         $this->genre = $genre;
     }
 
-    // Метод для получения информации о книге
     public function getBookInfo() {
-        return "Название: " . $this->title . ", Автор: " . $this->author . 
-               ", Год публикации: " . $this->publishedYear . ", Жанр: " . $this->genre;
+        return sprintf("Название: %s\nАвтор: %s\nГод публикации: %d\nЖанр: %s\n", 
+                       $this->title, $this->author, $this->publishedYear, $this->genre);
     }
 }
 
-// Класс Library управляет коллекцией книг
 class Library {
     private $books = [];
 
-    // Метод для добавления книги в библиотеку
     public function addBook(Book $book) {
         $this->books[] = $book;
     }
 
-    // Метод для удаления книги по названию
     public function removeBookByTitle($title) {
         foreach ($this->books as $index => $book) {
             if ($book->getTitle() === $title) {
                 unset($this->books[$index]);
-                $this->books = array_values($this->books); // Перенумерация массива
+                $this->books = array_values($this->books); 
                 return true;
             }
         }
         return false;
     }
 
-    // Метод для поиска книг по автору
     public function findBooksByAuthor($author) {
         $result = [];
         foreach ($this->books as $book) {
@@ -86,7 +78,6 @@ class Library {
         return $result;
     }
 
-    // Метод для отображения всех книг
     public function listAllBooks() {
         $result = [];
         foreach ($this->books as $book) {
@@ -96,36 +87,39 @@ class Library {
     }
 }
 
-// Пример использования классов
 
-// Создание экземпляров книг
 $book1 = new Book("Повелитель мух", "Уильям Голдинг", 2005, "Антиутопия");
 $book2 = new Book("Евгений Онегин", "Александр Пушкин", 1823, "Роман");
 $book3 = new Book("Особое мясо", "Агустина Бастеррика", 2017, "Фантастика");
 
-// Создание библиотеки и добавление книг
 $library = new Library();
 $library->addBook($book1);
 $library->addBook($book2);
 $library->addBook($book3);
 
-// Удаление книги по названию
 $library->removeBookByTitle("Повелитель мух");
 
-// Поиск книг по автору
 $booksByDostoevsky = $library->findBooksByAuthor("Агустина Бастеррика");
 
-// Вывод информации о книгах Достоевского
 echo "Книги Агустина Бастеррика:\n";
-foreach ($booksByDostoevsky as $book) {
-    echo $book->getBookInfo() . "\n";
+if (empty($booksByDostoevsky)) {
+    echo "Нет книг этого автора в библиотеке.\n";
+} else {
+    foreach ($booksByDostoevsky as $book) {
+        echo "-------------------------\n";
+        echo $book->getBookInfo();
+    }
 }
 
-// Вывод всех книг
 echo "\nВсе книги в библиотеке:\n";
 $allBooks = $library->listAllBooks();
-foreach ($allBooks as $bookInfo) {
-    echo $bookInfo . "\n";
+if (empty($allBooks)) {
+    echo "Библиотека пуста.\n";
+} else {
+    foreach ($allBooks as $bookInfo) {
+        echo "-------------------------\n";
+        echo $bookInfo;
+    }
 }
 
 ?>
